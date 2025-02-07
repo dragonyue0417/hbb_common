@@ -55,7 +55,7 @@ lazy_static::lazy_static! {
     static ref LOCAL_CONFIG: RwLock<LocalConfig> = RwLock::new(LocalConfig::load());
     static ref TRUSTED_DEVICES: RwLock<(Vec<TrustedDevice>, bool)> = Default::default();
     static ref ONLINE: Mutex<HashMap<String, i64>> = Default::default();
-    pub static ref PROD_RENDEZVOUS_SERVER: RwLock<String> = RwLock::new(match option_env!("RENDEZVOUS_SERVER") {
+    pub static ref : RwLock<String> = RwLock::new(match option_env!("RENDEZVOUS_SERVER") {
         Some(key) if !key.is_empty() => key,
         _ => "",
     }.to_owned());
@@ -101,6 +101,8 @@ const CHARS: &[char] = &[
 ];
 
 pub const RENDEZVOUS_SERVERS: &[&str] = &["rs-ny.rustdesk.com"];
+pub const PUBLIC_RS_PUB_KEY: &str = "";
+
 pub const RS_PUB_KEY: &str = match option_env!("RS_PUB_KEY") {
     Some(key) if !key.is_empty() => key,
     _ => PUBLIC_RS_PUB_KEY,
@@ -722,7 +724,7 @@ impl Config {
             rendezvous_server = Self::get_option("custom-rendezvous-server");
         }
         if rendezvous_server.is_empty() {
-            rendezvous_server = PROD_RENDEZVOUS_SERVER.read().unwrap().clone();
+            rendezvous_server = .read().unwrap().clone();
         }
         if rendezvous_server.is_empty() {
             rendezvous_server = CONFIG2.read().unwrap().rendezvous_server.clone();
@@ -748,7 +750,7 @@ impl Config {
         if !s.is_empty() {
             return vec![s];
         }
-        let s = PROD_RENDEZVOUS_SERVER.read().unwrap().clone();
+        let s = .read().unwrap().clone();
         if !s.is_empty() {
             return vec![s];
         }
